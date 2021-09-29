@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:headknocker/home/flows/flows.dart';
 import 'package:headknocker/home/widgets/widgets.dart';
@@ -36,22 +38,84 @@ class Home extends StatelessWidget {
   }
 }
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  var alarmSelect = false;
+  var lockSelect = true;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
+          height: 420,
+          decoration: const BoxDecoration(
+            gradient: RadialGradient(
+              colors: [
+                Color(0xFFCF4949),
+                Color(0xFFC2351F),
+              ],
+            ),
+          ),
           child: Padding(
-            padding: const EdgeInsets.all(80),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 80,
+              vertical: 40,
+            ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Connected BUtton =======================
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.grey[500],
+                    elevation: 3,
+                    shape: const StadiumBorder(),
+                    padding: const EdgeInsets.all(15),
+                  ),
+                  onPressed: null,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Connected',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline1!
+                            .copyWith(fontSize: 16),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Text(
+                  'Lexus ES',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 16),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 24),
                   child: Image.asset(
-                    'assets/logo.png',
+                    'assets/lexus.png',
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -59,29 +123,59 @@ class HomeView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            alarmSelect = !alarmSelect;
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
+                          side: BorderSide(
+                            width: 3,
+                            color: Colors.grey[500]!,
+                          ),
+                          elevation: alarmSelect ? 0 : 3,
                           shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(20),
-                          primary: Colors.blue, // <-- Button color
+                          padding: const EdgeInsets.all(10),
+                          primary: alarmSelect
+                              ? Colors.transparent
+                              : Colors.grey[500], // <-- Button color
                           onPrimary: Colors.red, // <-- Splash color
                         ),
-                        child: const Icon(Icons.menu, color: Colors.white),
+                        child: Icon(
+                          Icons.notifications_active,
+                          color: alarmSelect ? Colors.grey[500] : Colors.white,
+                          size: 40,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            lockSelect = !lockSelect;
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
+                          side: BorderSide(
+                            width: 3,
+                            color: Colors.grey[500]!,
+                          ),
+                          elevation: lockSelect ? 0 : 3,
                           shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(20),
-                          primary: Colors.blue, // <-- Button color
+                          padding: const EdgeInsets.all(10),
+                          primary: lockSelect
+                              ? Colors.transparent
+                              : Colors.grey[500], // <-- Button color
                           onPrimary: Colors.red, // <-- Splash color
                         ),
-                        child: const Icon(Icons.menu, color: Colors.white),
+                        child: Icon(
+                          Icons.vpn_key,
+                          color: lockSelect ? Colors.grey[500] : Colors.white,
+                          size: 40,
+                        ),
                       ),
                     )
                   ],

@@ -21,9 +21,9 @@ class App extends StatelessWidget {
         highlightColor: const Color(0xFFE7E7E7),
         textTheme: TextTheme(
           headline1: TextStyle(
-            fontFamily: GoogleFonts.arimo().fontFamily,
+            fontFamily: GoogleFonts.archivoBlack().fontFamily,
             color: const Color(0xFFE7E7E7),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w900,
             fontSize: 20,
           ),
           headline2: TextStyle(
