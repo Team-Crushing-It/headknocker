@@ -1,5 +1,5 @@
-name: l2t_beta
-description: A new Flutter project.
+name: headknocker
+description: A new type of car alarm
 version: 1.0.0+1
 publish_to: none
 
@@ -16,7 +16,8 @@ dependencies:
   intl: ^0.17.0
   url_launcher: ^6.0.3
   google_fonts: ^2.1.0
-  coast: ^2.0.2
+  flow_builder: ^0.0.4
+  equatable: ^2.0.3
 
 dev_dependencies:
   flutter_test:
@@ -30,8 +31,3 @@ flutter:
   generate: true
   assets:
     - assets/
-    - assets/homepage_lines/
-    - assets/hoverLogo/
-    - assets/logo/
-    - assets/avatar/
-    - assets/activities_images/

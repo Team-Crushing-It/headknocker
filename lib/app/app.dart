@@ -6,10 +6,8 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:l2t_beta/home/home.dart';
-import 'package:l2t_beta/l10n/l10n.dart';
+import 'package:headknocker/home/home.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -17,20 +15,27 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryTextTheme: TextTheme(
+        primaryColor: const Color(0xFFC2351F),
+        highlightColor: const Color(0xFFE7E7E7),
+        textTheme: TextTheme(
           headline1: TextStyle(
-              fontFamily: GoogleFonts.montserrat().fontFamily,
-              color: Colors.black),
+            fontFamily: GoogleFonts.arimo().fontFamily,
+            color: const Color(0xFFE7E7E7),
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+          headline2: TextStyle(
+            fontFamily: GoogleFonts.arimo().fontFamily,
+            color: const Color(0xFF9E9E9E),
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
         ),
         appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
       ),
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Home(),
+      home: const Home(),
     );
   }
 }

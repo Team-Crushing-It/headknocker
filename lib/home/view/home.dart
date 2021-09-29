@@ -1,453 +1,175 @@
-import 'package:coast/coast.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:l2t_beta/home/widgets/widgets.dart';
-import 'package:l2t_beta/home/widgets/page_details.dart';
+import 'package:headknocker/home/flows/flows.dart';
+import 'package:headknocker/home/widgets/widgets.dart';
 
-class Home extends StatefulWidget {
-  static Page page() => MaterialPage<void>(child: Home());
-
-  @override
-  _HomeState createState() => _HomeState();
+Future<String> cheapDelay() async {
+  await Future.delayed(const Duration(seconds: 2), () {});
+  return 'Hello World';
 }
 
-class _HomeState extends State<Home> {
-  final _beaches = [
-    Beach(builder: (context) => const IntroHero()),
-    Beach(builder: (context) => const FirstSection()),
-    Beach(builder: (context) => const SecondSection()),
-    Beach(builder: (context) => const ThirdSection()),
-    Beach(builder: (context) => const FourthSection()),
-  ];
-
-  final _coastController = CoastController();
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NavBar(),
-      body: Coast(
-        scrollDirection: Axis.vertical,
-        beaches: _beaches,
-        controller: _coastController,
-        observers: [
-          CrabController(),
-        ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black12,
+        elevation: 0,
+        onPressed: () {},
+        child: Icon(Icons.settings),
       ),
-      extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).primaryColor,
+      body: SafeArea(
+        child: FutureBuilder<String>(
+          future: cheapDelay(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return const HomeView();
+            }
+            return const HNLoad();
+          },
+        ),
+      ),
     );
   }
 }
 
-class IntroHero extends StatefulWidget {
-  const IntroHero({Key? key}) : super(key: key);
-
-  @override
-  State<IntroHero> createState() => _IntroHeroState();
-}
-
-class _IntroHeroState extends State<IntroHero> {
-  Image? l2t;
-
-  @override
-  void initState() {
-    super.initState();
-    l2t = Image.asset('assets/logo/1.png');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(l2t!.image, context);
-  }
+class HomeView extends StatelessWidget {
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      color: const Color(0xffF7F9FF),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Crab(
-              tag: 'container',
-              child: Container(
-                height: 300,
-                width: 500,
-                child: l2t,
-              ),
+    return Column(
+      children: [
+        Container(
+          child: Padding(
+            padding: const EdgeInsets.all(80),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: Image.asset(
+                    'assets/logo.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(20),
+                          primary: Colors.blue, // <-- Button color
+                          onPrimary: Colors.red, // <-- Splash color
+                        ),
+                        child: const Icon(Icons.menu, color: Colors.white),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(20),
+                          primary: Colors.blue, // <-- Button color
+                          onPrimary: Colors.red, // <-- Splash color
+                        ),
+                        child: const Icon(Icons.menu, color: Colors.white),
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 80.0),
-              child: Text('Bring your vision to life',
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .headline1!
-                      .copyWith(fontSize: 50)),
-            )
-          ],
+          ),
         ),
-      ),
+        Expanded(
+          child: ListView(
+            children: [
+              ListTile(
+                leading: Icon(Icons.notifications_active,
+                    size: 32, color: Theme.of(context).highlightColor),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('ALARM', style: Theme.of(context).textTheme.headline1),
+                    Text('Headknocker by Foreigner',
+                        style: Theme.of(context).textTheme.headline2),
+                  ],
+                ),
+                trailing: Icon(Icons.chevron_right,
+                    color: Theme.of(context).highlightColor),
+                onTap: () async {
+                  await Navigator.of(context).push(OnboardingFlow.route());
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(
+                        content: Text('Onboarding Flow Complete!'),
+                      ),
+                    );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.vpn_key,
+                    size: 32, color: Theme.of(context).highlightColor),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('LOCK', style: Theme.of(context).textTheme.headline1),
+                    Text('Locked',
+                        style: Theme.of(context).textTheme.headline2),
+                  ],
+                ),
+                trailing: Icon(Icons.chevron_right,
+                    color: Theme.of(context).highlightColor),
+                onTap: () async {
+                  await Navigator.of(context).push(OnboardingFlow.route());
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(
+                        content: Text('Onboarding Flow Complete!'),
+                      ),
+                    );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.alarm,
+                    size: 32, color: Theme.of(context).highlightColor),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('SOFTWARE UPDATE',
+                        style: Theme.of(context).textTheme.headline1),
+                    Text('Up-to-date',
+                        style: Theme.of(context).textTheme.headline2),
+                  ],
+                ),
+                trailing: Icon(Icons.chevron_right,
+                    color: Theme.of(context).highlightColor),
+                onTap: () async {
+                  await Navigator.of(context).push(OnboardingFlow.route());
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(
+                        content: Text('Onboarding Flow Complete!'),
+                      ),
+                    );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
-}
-
-class FirstSection extends StatefulWidget {
-  const FirstSection({Key? key}) : super(key: key);
-
-  @override
-  State<FirstSection> createState() => _FirstSectionState();
-}
-
-class _FirstSectionState extends State<FirstSection> {
-  Image? line;
-  Image? l2t;
-
-  @override
-  void initState() {
-    super.initState();
-    l2t = Image.asset('assets/logo/2.png');
-    line = Image.asset('assets/homepage_lines/1.png');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(line!.image, context);
-    precacheImage(l2t!.image, context);
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Container(
-          color: const Color(0xffF7F9FF),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              //dynamic gutters
-              horizontal: (MediaQuery.of(context).size.width / 12 + 48),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Crab(
-                      flightShuttleBuilder: textFlightShuttleBuilder,
-                      tag: 'container',
-                      child: Container(
-                        height: 100,
-                        width: 300,
-                        child: Image.asset('assets/logo/2.png'),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text('Serve',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .headline1!
-                              .copyWith(fontSize: 50)),
-                    )
-                  ],
-                ),
-                Crab(
-                  flightShuttleBuilder: textFlightShuttleBuilder,
-                  tag: 'line',
-                  child: Container(
-                      height: 300,
-                      width: 50,
-                      child: Image.asset('assets/homepage_lines/1.png')),
-                ),
-                PageDetails(
-                  decribing_text: [
-                    Text(
-                      "We build hardware,\nsoftware, and teams",
-                      style: GoogleFonts.montserrat(fontSize: 30),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      "better, faster, cheaper",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 30, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                  images: [
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png"
-                  ],
-                  images_bottom_text: ["Native Mobile", "Web", "UX/UI"],
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-}
-
-class SecondSection extends StatefulWidget {
-  const SecondSection({Key? key}) : super(key: key);
-
-  @override
-  State<SecondSection> createState() => _SecondSectionState();
-}
-
-class _SecondSectionState extends State<SecondSection> {
-  Image? line;
-  Image? l2t;
-
-  @override
-  void initState() {
-    super.initState();
-    l2t = Image.asset('assets/logo/3.png');
-    line = Image.asset('assets/homepage_lines/2.png');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(line!.image, context);
-    precacheImage(l2t!.image, context);
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              //dynamic gutters
-              horizontal: (MediaQuery.of(context).size.width / 12 + 48),
-            ),
-            child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Crab(
-                      flightShuttleBuilder: textFlightShuttleBuilder,
-                      tag: 'container',
-                      child: Container(
-                        height: 100,
-                        width: 300,
-                        child: Image.asset('assets/logo/3.png'),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text('Free',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .headline1!
-                              .copyWith(fontSize: 50)),
-                    )
-                  ],
-                ),
-                Crab(
-                  flightShuttleBuilder: textFlightShuttleBuilder,
-                  tag: 'line',
-                  child: Container(
-                      height: 300,
-                      width: 50,
-                      child: Image.asset('assets/homepage_lines/2.png')),
-                ),
-                PageDetails(
-                  decribing_text: [
-                    Text(
-                      "We offer our services ",
-                      style: GoogleFonts.montserrat(fontSize: 30),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      "for free & paid",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 30, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                  images: [
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png"
-                  ],
-                  images_bottom_text: ["Why?", "How?", "What?"],
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-}
-
-class ThirdSection extends StatefulWidget {
-  const ThirdSection({Key? key}) : super(key: key);
-
-  @override
-  State<ThirdSection> createState() => _ThirdSectionState();
-}
-
-class _ThirdSectionState extends State<ThirdSection> {
-  Image? line;
-  Image? l2t;
-
-  @override
-  void initState() {
-    super.initState();
-    l2t = Image.asset('assets/logo/4.png');
-    line = Image.asset('assets/homepage_lines/3.png');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(line!.image, context);
-    precacheImage(l2t!.image, context);
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              //dynamic gutters
-              horizontal: (MediaQuery.of(context).size.width / 12 + 48),
-            ),
-            child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Crab(
-                      flightShuttleBuilder: textFlightShuttleBuilder,
-                      tag: 'container',
-                      child: Container(
-                        height: 100,
-                        width: 300,
-                        child: l2t,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text('Free',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .headline1!
-                              .copyWith(fontSize: 50)),
-                    )
-                  ],
-                ),
-                Crab(
-                  flightShuttleBuilder: textFlightShuttleBuilder,
-                  tag: 'line',
-                  child: Container(height: 300, width: 50, child: line),
-                ),
-                PageDetails(
-                  decribing_text: [
-                    Text(
-                      "Designed for scalability",
-                      style: GoogleFonts.montserrat(fontSize: 30),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                  images: [
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png"
-                  ],
-                  images_bottom_text: ["Native Mobile", "Web", "UX/UI"],
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-}
-
-class FourthSection extends StatefulWidget {
-  const FourthSection({Key? key}) : super(key: key);
-
-  @override
-  State<FourthSection> createState() => _FourthSectionState();
-}
-
-class _FourthSectionState extends State<FourthSection> {
-  Image? line;
-  Image? l2t;
-
-  @override
-  void initState() {
-    super.initState();
-    l2t = Image.asset('assets/logo/5.png');
-    line = Image.asset('assets/homepage_lines/4.png');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(line!.image, context);
-    precacheImage(l2t!.image, context);
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              //dynamic gutters
-              horizontal: (MediaQuery.of(context).size.width / 12 + 48),
-            ),
-            child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Crab(
-                      flightShuttleBuilder: textFlightShuttleBuilder,
-                      tag: 'container',
-                      child: Container(
-                        height: 100,
-                        width: 300,
-                        child: l2t,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text('Free',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .headline1!
-                              .copyWith(fontSize: 50)),
-                    )
-                  ],
-                ),
-                Crab(
-                  flightShuttleBuilder: textFlightShuttleBuilder,
-                  tag: 'line',
-                  child: Container(height: 300, width: 50, child: line),
-                ),
-                PageDetails(
-                  decribing_text: [
-                    Text(
-                      "Learn how L2T can best\nserve you",
-                      style: GoogleFonts.montserrat(fontSize: 30),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                  images: [
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png",
-                    "assets/activities_images/sample_img.png"
-                  ],
-                  images_bottom_text: ["Native Mobile", "Web", "UX/UI"],
-                )
-              ],
-            ),
-          ),
-        ),
-      );
 }

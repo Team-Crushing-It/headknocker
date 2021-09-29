@@ -10,8 +10,8 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
-import 'package:l2t_beta/app/app.dart';
-import 'package:l2t_beta/app/app_bloc_observer.dart';
+import 'package:headknocker/app/app.dart';
+import 'package:headknocker/app/app_bloc_observer.dart';
 
 void main() {
   Bloc.observer = AppBlocObserver();
