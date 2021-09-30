@@ -271,7 +271,7 @@ class _HomeViewState extends State<HomeView> {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(context.read<AppBloc>().state.userId,
+                      Text(context.read<AppBloc>().state.user.id,
                           style: Theme.of(context).textTheme.headline1),
                       Text('Headknocker by Foreigner',
                           style: Theme.of(context).textTheme.headline2),
