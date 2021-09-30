@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  authentication_repository:
+    path: packages/authentication_repository
   bloc: ^7.1.0
   flutter_bloc: ^7.1.0
   intl: ^0.17.0

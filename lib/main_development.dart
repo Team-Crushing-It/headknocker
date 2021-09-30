@@ -13,14 +13,22 @@ import 'package:flutter/widgets.dart';
 import 'package:headknocker/app/app.dart';
 import 'package:headknocker/app/app_bloc_observer.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:authentication_repository/authentication_repository.dart';
+
+Future<void> main() async {
   Bloc.observer = AppBlocObserver();
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
+  await Firebase.initializeApp();
+  final authenticationRepository = AuthenticationRepository();
 
   runZonedGuarded(
-    () => runApp(const App()),
+    () => runApp(App(
+      authenticationRepository: authenticationRepository,
+    )),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }
