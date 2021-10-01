@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:game_repository/game_repository.dart';
+import 'package:game_repository/songs_repository.dart';
 import 'package:meta/meta.dart';
 import '../entities/entities.dart';
 

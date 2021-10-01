@@ -7,7 +7,7 @@ import 'package:headknocker/home/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<String> cheapDelay() async {
-  await Future.delayed(const Duration(seconds: 2), () {});
+  await Future.delayed(const Duration(seconds: 3), () {});
   return 'Hello World';
 }
 
@@ -264,22 +264,6 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       );
                   },
-                ),
-                ListTile(
-                  leading: Icon(Icons.notifications_active,
-                      size: 32, color: Theme.of(context).highlightColor),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(context.read<AppBloc>().state.user.id,
-                          style: Theme.of(context).textTheme.headline1),
-                      Text('Headknocker by Foreigner',
-                          style: Theme.of(context).textTheme.headline2),
-                    ],
-                  ),
-                  trailing: Icon(Icons.chevron_right,
-                      color: Theme.of(context).highlightColor),
-                  onTap: () {},
                 ),
               ],
             ),
