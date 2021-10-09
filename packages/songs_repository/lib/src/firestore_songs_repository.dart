@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:game_repository/songs_repository.dart';
+import 'package:songs_repository/songs_repository.dart';
 import 'entities/entities.dart';
 import 'package:cache/cache.dart';
 import 'package:meta/meta.dart';
@@ -29,13 +29,20 @@ class FirestoreSongsRepository {
   final alarmsCollection = FirebaseFirestore.instance.collection('alarms');
 
   Future<List<Song>> fetchSongs(String id) async {
-    return FirebaseFirestore.instance
-        .collection(id)
-        .snapshots()
-        .map((snapshot) {
+    return FirebaseFirestore.instance.collection(id).get().then((snapshot) {
       return snapshot.docs
           .map((doc) => Song.fromEntity(SongEntity.fromSnapshot(doc)))
           .toList();
-    }).first;
+    });
+  }
+
+  Future<void> addSong(String url, String id) async {
+    //TODO: scrape actual title
+
+    Song output = Song(title: 'title', url: url);
+
+    FirebaseFirestore.instance.collection(id).add(
+          output.toEntity().toJson(Timestamp.now().toString()),
+        );
   }
 }
