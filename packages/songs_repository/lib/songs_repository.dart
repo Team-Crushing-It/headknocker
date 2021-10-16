@@ -1,4 +1,4 @@
-library alarm_repository;
+library songs_repository;
 
 export 'src/firestore_songs_repository.dart';
 export 'src/models/models.dart';

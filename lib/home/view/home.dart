@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:headknocker/add_song/add_song.dart';
 import 'package:headknocker/app/bloc/app_bloc.dart';
 import 'package:headknocker/home/flows/flows.dart';
 import 'package:headknocker/home/widgets/widgets.dart';
@@ -204,15 +205,9 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   trailing: Icon(Icons.chevron_right,
                       color: Theme.of(context).highlightColor),
-                  onTap: () async {
-                    await Navigator.of(context).push(OnboardingFlow.route());
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(
-                        const SnackBar(
-                          content: Text('Onboarding Flow Complete!'),
-                        ),
-                      );
+                  onTap: () {
+                    Navigator.of(context).push<void>(MaterialPageRoute(
+                        builder: (context) => const AddSongPage()));
                   },
                 ),
                 ListTile(

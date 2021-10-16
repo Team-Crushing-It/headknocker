@@ -11,21 +11,26 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:headknocker/app/bloc/app_bloc.dart';
 import 'package:headknocker/home/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:songs_repository/songs_repository.dart';
 
 class App extends StatelessWidget {
   const App({
     Key? key,
     required AuthenticationRepository authenticationRepository,
+    required FirestoreSongsRepository songsRepository,
   })  : _authenticationRepository = authenticationRepository,
+        _songsRepository = songsRepository,
         super(key: key);
 
   final AuthenticationRepository _authenticationRepository;
+  final FirestoreSongsRepository _songsRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: _authenticationRepository),
+        RepositoryProvider.value(value: _songsRepository),
       ],
       child: BlocProvider(
         create: (context) => AppBloc(

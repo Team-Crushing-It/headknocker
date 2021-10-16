@@ -1,43 +1,41 @@
 import 'package:equatable/equatable.dart';
-import 'package:game_repository/songs_repository.dart';
+import 'package:songs_repository/songs_repository.dart';
 import 'package:meta/meta.dart';
 import '../entities/entities.dart';
 
 @immutable
 class Song extends Equatable {
   const Song({
-    required this.artist,
-    required this.song,
+    required this.title,
+    required this.url,
   });
 
-  final String artist;
-  final String song;
+  final String title;
+  final String url;
 
   @override
-  List<Object> get props => [artist, song];
+  List<Object> get props => [title, url];
 
-  Song copyWith({
-    required List<String> songData,
-  }) {
+  Song copyWith({String? url, String? title}) {
     return Song(
-      artist: artist,
-      song: song,
+      title: title ?? this.title,
+      url: url ?? this.url,
     );
   }
 
   @override
   String toString() {
-    return 'Song{artist: $artist}';
+    return 'Song{title: $title}';
   }
 
   SongEntity toEntity() {
-    return SongEntity(artist, song);
+    return SongEntity(title, url);
   }
 
   static Song fromEntity(SongEntity entity) {
     return Song(
-      artist: entity.artist,
-      song: entity.song,
+      title: entity.title,
+      url: entity.url,
     );
   }
 }

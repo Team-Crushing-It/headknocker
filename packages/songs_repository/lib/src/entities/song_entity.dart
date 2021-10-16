@@ -1,36 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:game_repository/src/models/models.dart';
+import 'package:songs_repository/src/models/models.dart';
 
 class SongEntity extends Equatable {
-  const SongEntity(this.artist, this.song);
+  const SongEntity(this.title, this.url);
 
-  final String artist;
-  final String song;
+  final String title;
+  final String url;
 
   @override
-  List<Object?> get props => [artist, song];
+  List<Object?> get props => [title, url];
 
-  Map<String, Object?> toJson() {
+  Map<String, Object?> toJson(String timeStamp) {
     return {
-      'artist': artist,
-      'song': song,
+      'title': title,
+      'url': url,
+      'createdAt': timeStamp,
     };
   }
 
   @override
   String toString() {
-    return 'SongEntity {artist: $artist}';
+    return 'SongEntity {title: $title}';
   }
 
   static SongEntity fromJson(Map<String, Object?> json) {
     return SongEntity(
-      json['artist'] as String,
-      json['song'] as String,
+      json['title'] as String,
+      json['url'] as String,
     );
   }
 
   static SongEntity fromSnapshot(DocumentSnapshot snap) {
-    return SongEntity(snap.get('artist'), snap.get('song'));
+    return SongEntity(snap.get('title'), snap.get('url'));
   }
 }
