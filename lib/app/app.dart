@@ -70,7 +70,7 @@ class AppView extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color(0xFFC2351F),
+          primaryColor: const Color(0xFF000000),
           highlightColor: const Color(0xFFE7E7E7),
           textTheme: TextTheme(
             headline1: TextStyle(

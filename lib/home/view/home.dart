@@ -74,8 +74,8 @@ class _HomePageState extends State<HomePage> {
             decoration: const BoxDecoration(
               gradient: RadialGradient(
                 colors: [
-                  Color(0xFFE95959),
-                  Color(0xFFC2351F),
+                  Color(0xFF636363),
+                  Color(0xFF000000),
                 ],
               ),
             ),
