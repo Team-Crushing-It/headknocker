@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:songs_repository/src/models/models.dart';
 
 class SongEntity extends Equatable {
   const SongEntity(this.title, this.url);
@@ -11,11 +10,10 @@ class SongEntity extends Equatable {
   @override
   List<Object?> get props => [title, url];
 
-  Map<String, Object?> toJson(String timeStamp) {
+  Map<String, Object?> toJson() {
     return {
       'title': title,
       'url': url,
-      'createdAt': timeStamp,
     };
   }
 

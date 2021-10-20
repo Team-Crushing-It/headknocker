@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:songs_repository/songs_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -12,11 +14,27 @@ class AddSongCubit extends Cubit<AddSongState> {
       : _repository = repository,
         _id = id,
         super(const AddSongState()) {
-    fetchSongs(id);
+    streamSongs();
   }
 
   final FirestoreSongsRepository _repository;
   final String _id;
+  late final StreamSubscription _firestoreSubscription;
+
+  void streamSongs() {
+    _firestoreSubscription = _repository.songs(_id).listen(
+          (songStream) => {
+            print('streaming'),
+            emit(state.copyWith(songs: songStream)),
+          },
+        );
+  }
+
+  void addSong() {
+    const output = Song(title: 'title', url: '');
+
+    _repository.addDocument(_id, output.toEntity().toJson());
+  }
 
   void emailChanged(String value) {
     final link = Link.dirty(value);
@@ -26,10 +44,12 @@ class AddSongCubit extends Cubit<AddSongState> {
     ));
   }
 
-  Future<void> fetchSongs(String id) async {
-    print('fetch songs');
-    final output = await _repository.fetchSongs(id);
+  @override
+  Future<void> close() {
+    _firestoreSubscription.cancel();
 
-    emit(state.copyWith(songs: output));
+    // _gameRepository.removeUser(state.userId, state.game);
+
+    return super.close();
   }
 }

@@ -12,12 +12,14 @@ class HomeCubit extends Cubit<HomeState> {
   final FirestoreSongsRepository _repository;
 
   Future<void> checkId(String id) async {
-    // First we check if the user has a
+    print('id: $id');
     final exists = await _repository.checkId(id);
+
+    print('exists: $exists');
 
     if (!exists) {
       await _repository.createCollection(
-          id, const Song(title: 'No Song', url: 'url'));
+          id, const Song(title: 'No Alarm Set', url: 'url'));
     }
 
     await Future.delayed(const Duration(seconds: 3), () {});

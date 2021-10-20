@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:headknocker/add_song/add_song.dart';
+import 'package:songs_repository/songs_repository.dart';
 
 class AddSong extends StatelessWidget {
   const AddSong({Key? key}) : super(key: key);
@@ -9,6 +10,13 @@ class AddSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey,
+        child: const Icon(Icons.add, color: Colors.black),
+        onPressed: () {
+          context.read<AddSongCubit>().addSong();
+        },
+      ),
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -17,11 +25,8 @@ class AddSong extends StatelessWidget {
           onTap: () => Navigator.of(context).pop(),
           child: Row(
             children: [
-              Expanded(
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                  onPressed: () {},
-                ),
+              const Expanded(
+                child: Icon(Icons.arrow_back_ios, color: Colors.white),
               ),
               Expanded(
                 child: Text(
@@ -36,16 +41,18 @@ class AddSong extends StatelessWidget {
           ),
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(8),
-        child: AddSongPage(),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: _AddSongView(list: context.watch<AddSongCubit>().state.songs),
       ),
     );
   }
 }
 
-class AddSongPage extends StatelessWidget {
-  const AddSongPage({Key? key}) : super(key: key);
+class _AddSongView extends StatelessWidget {
+  const _AddSongView({Key? key, required this.list}) : super(key: key);
+
+  final List<Song> list;
 
   @override
   Widget build(BuildContext context) {
@@ -59,20 +66,156 @@ class AddSongPage extends StatelessWidget {
             );
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/logo.png',
-                height: 120,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 24),
+              child: Text(
+                'Current Alarm Song',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontSize: 24),
               ),
-              _LinkInput(),
-              _AddSongButton(),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                list.first.title,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontSize: 16),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: Text(
+                'Recents',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontSize: 24),
+              ),
+            ),
+            if (list.length == 1)
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  'no recents',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 16),
+                ),
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+                    child: Text(
+                      list[index].title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(fontSize: 16),
+                    ),
+                  );
+                },
+              )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CurrentAlarmSong extends StatelessWidget {
+  const _CurrentAlarmSong({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Current Alarm Song',
+              style:
+                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RecentsView extends StatelessWidget {
+  const _RecentsView({Key? key, required this.list}) : super(key: key);
+
+  final List<Song> list;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 48),
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Recents',
+              style:
+                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24),
+            ),
+            if (list.length == 1)
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  'no recents',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 16),
+                ),
+              )
+            else
+              Expanded(
+                child: ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return Text(
+                      list[index].title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(fontSize: 16),
+                    );
+                  },
+                ),
+              )
+          ],
         ),
       ),
     );
