@@ -3,31 +3,23 @@
 import 'package:flutter/material.dart';
 import 'package:headknocker/add_song/add_song.dart';
 import 'package:headknocker/app/bloc/app_bloc.dart';
+import 'package:headknocker/home/cubit/home_cubit.dart';
 import 'package:headknocker/home/flows/flows.dart';
 import 'package:headknocker/home/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-Future<String> cheapDelay() async {
-  await Future.delayed(const Duration(seconds: 3), () {});
-  return 'Hello World';
-}
+import 'package:songs_repository/songs_repository.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder<String>(
-        future: cheapDelay(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const HomeView();
-          }
-          return const HNLoad();
-        },
+    return MultiBlocProvider(providers: [
+      BlocProvider<AddSongCubit>(
+        create: (_) => AddSongCubit(context.read<FirestoreSongsRepository>()
+          ..fetchSongs(context.read<AppBloc>().state.user.id)),
       ),
-    );
+    ], child: const HomeView());
   }
 }
 
@@ -39,6 +31,27 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        if (state.status == HomeStatus.loaded) {
+          return const HomePage();
+        }
+        return const HNLoad();
+      },
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   var alarmSelect = false;
   var lockSelect = true;
 
@@ -207,7 +220,7 @@ class _HomeViewState extends State<HomeView> {
                       color: Theme.of(context).highlightColor),
                   onTap: () {
                     Navigator.of(context).push<void>(MaterialPageRoute(
-                        builder: (context) => const AddSongPage()));
+                        builder: (context) => const AddSong()));
                   },
                 ),
                 ListTile(

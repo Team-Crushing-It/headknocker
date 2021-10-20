@@ -36,6 +36,26 @@ class FirestoreSongsRepository {
     });
   }
 
+  Future<bool> checkId(String id) async {
+    final check = await FirebaseFirestore.instance
+        .collection(id)
+        .limit(1)
+        .get()
+        .then((query) => query.size);
+
+    final output = check > 0 ? true : false;
+
+    return output;
+  }
+
+  Future<void> createCollection(String name) async {
+    Song output = Song(title: 'title', url: 'url');
+
+    FirebaseFirestore.instance.collection(name).add(
+          output.toEntity().toJson(Timestamp.now().toString()),
+        );
+  }
+
   Future<void> addSong(String url, String id) async {
     //TODO: scrape actual title
 
