@@ -13,10 +13,11 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> checkId(String id) async {
     // First we check if the user has a
-    final output = await _repository.checkId(id);
+    final exists = await _repository.checkId(id);
 
-    if (!output) {
-      await _repository.createCollection(id);
+    if (!exists) {
+      await _repository.createCollection(
+          id, const Song(title: 'No Song', url: 'url'));
     }
 
     await Future.delayed(const Duration(seconds: 3), () {});

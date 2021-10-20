@@ -48,11 +48,9 @@ class FirestoreSongsRepository {
     return output;
   }
 
-  Future<void> createCollection(String name) async {
-    Song output = Song(title: 'title', url: 'url');
-
-    FirebaseFirestore.instance.collection(name).add(
-          output.toEntity().toJson(Timestamp.now().toString()),
+  Future<void> createCollection(String id, Song song) async {
+    FirebaseFirestore.instance.collection(id).add(
+          song.toEntity().toJson(Timestamp.now().toString()),
         );
   }
 

@@ -1,20 +1,41 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:headknocker/add_song/add_song.dart';
-import 'package:headknocker/app/bloc/app_bloc.dart';
-import 'package:songs_repository/songs_repository.dart';
 
 class AddSong extends StatelessWidget {
   const AddSong({Key? key}) : super(key: key);
 
-  static Page page() => const MaterialPage<void>(child: AddSong());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leadingWidth: 100,
+        leading: InkWell(
+          onTap: () => Navigator.of(context).pop(),
+          child: Row(
+            children: [
+              Expanded(
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                  onPressed: () {},
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Back',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: const Padding(
         padding: EdgeInsets.all(8),
         child: AddSongPage(),

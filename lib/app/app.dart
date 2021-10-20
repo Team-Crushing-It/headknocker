@@ -8,6 +8,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:headknocker/add_song/add_song.dart';
 import 'package:headknocker/app/bloc/app_bloc.dart';
 import 'package:headknocker/home/cubit/home_cubit.dart';
 import 'package:headknocker/home/home.dart';
@@ -67,27 +68,37 @@ class AppView extends StatelessWidget {
               .checkId(context.read<AppBloc>().state.user.id);
         }
       },
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: const Color(0xFF000000),
-          highlightColor: const Color(0xFFE7E7E7),
-          textTheme: TextTheme(
-            headline1: TextStyle(
-              fontFamily: GoogleFonts.archivoBlack().fontFamily,
-              color: const Color(0xFFE7E7E7),
-              fontSize: 20,
+      child: BlocProvider<AddSongCubit>(
+        lazy: true,
+        create: (_) => AddSongCubit(
+            repository: context.read<FirestoreSongsRepository>(),
+            id: context.read<AppBloc>().state.user.id),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: const Color(0xFF000000),
+            highlightColor: const Color(0xFFE7E7E7),
+            textTheme: TextTheme(
+              headline1: TextStyle(
+                fontFamily: GoogleFonts.archivoBlack().fontFamily,
+                color: const Color(0xFFE7E7E7),
+                fontSize: 20,
+              ),
+              headline2: TextStyle(
+                fontFamily: GoogleFonts.arimo().fontFamily,
+                color: const Color(0xFF9E9E9E),
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
             ),
-            headline2: TextStyle(
-              fontFamily: GoogleFonts.arimo().fontFamily,
-              color: const Color(0xFF9E9E9E),
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
+            appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
           ),
-          appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+          routes: {
+            '/': (context) => const Home(),
+            '/addSong': (context) => const AddSong(),
+          },
+          initialRoute: '/',
         ),
-        home: const Home(),
       ),
     );
   }

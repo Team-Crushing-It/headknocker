@@ -4,7 +4,7 @@ class AddSongState extends Equatable {
   const AddSongState(
       {this.link = const Link.pure(),
       this.status = FormzStatus.pure,
-      this.songs = const []});
+      this.songs = const [Song(title: 'title', url: 'url')]});
 
   final Link link;
   final FormzStatus status;

@@ -1,25 +1,18 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:headknocker/add_song/add_song.dart';
-import 'package:headknocker/app/bloc/app_bloc.dart';
 import 'package:headknocker/home/cubit/home_cubit.dart';
 import 'package:headknocker/home/flows/flows.dart';
 import 'package:headknocker/home/widgets/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:songs_repository/songs_repository.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
-      BlocProvider<AddSongCubit>(
-        create: (_) => AddSongCubit(context.read<FirestoreSongsRepository>()
-          ..fetchSongs(context.read<AppBloc>().state.user.id)),
-      ),
-    ], child: const HomeView());
+    return const HomeView();
   }
 }
 
@@ -212,15 +205,15 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text('ALARM',
                           style: Theme.of(context).textTheme.headline1),
-                      Text('Headknocker by Foreigner',
+                      Text(
+                          context.watch<AddSongCubit>().state.songs.first.title,
                           style: Theme.of(context).textTheme.headline2),
                     ],
                   ),
                   trailing: Icon(Icons.chevron_right,
                       color: Theme.of(context).highlightColor),
                   onTap: () {
-                    Navigator.of(context).push<void>(MaterialPageRoute(
-                        builder: (context) => const AddSong()));
+                    Navigator.of(context).pushNamed('/addSong');
                   },
                 ),
                 ListTile(
