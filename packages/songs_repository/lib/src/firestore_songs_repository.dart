@@ -28,21 +28,48 @@ class FirestoreSongsRepository {
 
   final alarmsCollection = FirebaseFirestore.instance.collection('alarms');
 
-  Future<List<Song>> fetchSongs(String id) async {
-    return FirebaseFirestore.instance.collection(id).get().then((snapshot) {
-      return snapshot.docs
-          .map((doc) => Song.fromEntity(SongEntity.fromSnapshot(doc)))
-          .toList();
+  Stream<List<Song>> songs(String id) {
+    return FirebaseFirestore.instance
+        .collection(id)
+        .orderBy('created')
+        .snapshots()
+        .map((query) {
+      return query.docs.map((song) {
+        final songs = Song.fromEntity(SongEntity.fromSnapshot(song));
+        return songs;
+      }).toList();
     });
   }
 
-  Future<void> addSong(String url, String id) async {
+  Future<bool> checkId(String id) async {
+    final check = await FirebaseFirestore.instance
+        .collection(id)
+        .limit(1)
+        .get()
+        .then((query) => query.size);
+
+    final output = check > 0 ? true : false;
+
+    return output;
+  }
+
+  Future<void> createCollection(String id, Song song) async {
+    print('id create collection: $id');
+    // FirebaseFirestore.instance.collection(id).add(
+    //       song.toEntity().toJson(Timestamp.now().toString()),
+    //     );
+  }
+
+  Future<void> addDocument(
+      String collection, Map<String, Object?> object) async {
     //TODO: scrape actual title
 
-    Song output = Song(title: 'title', url: url);
+    final timeStamp = Timestamp.now().toString();
 
-    FirebaseFirestore.instance.collection(id).add(
-          output.toEntity().toJson(Timestamp.now().toString()),
-        );
+    object['created'] = timeStamp;
+
+    print(object);
+
+    FirebaseFirestore.instance.collection(collection).add(object);
   }
 }

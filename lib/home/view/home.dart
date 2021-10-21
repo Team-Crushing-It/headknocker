@@ -1,33 +1,18 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:headknocker/add_song/add_song.dart';
-import 'package:headknocker/app/bloc/app_bloc.dart';
+import 'package:headknocker/home/cubit/home_cubit.dart';
 import 'package:headknocker/home/flows/flows.dart';
 import 'package:headknocker/home/widgets/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-Future<String> cheapDelay() async {
-  await Future.delayed(const Duration(seconds: 3), () {});
-  return 'Hello World';
-}
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder<String>(
-        future: cheapDelay(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const HomeView();
-          }
-          return const HNLoad();
-        },
-      ),
-    );
+    return const HomeView();
   }
 }
 
@@ -39,11 +24,34 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        if (state.status == HomeStatus.loaded) {
+          return const HomePage();
+        }
+        return const HNLoad();
+      },
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   var alarmSelect = false;
   var lockSelect = true;
 
   @override
   Widget build(BuildContext context) {
+    final songs = context.watch<AddSongCubit>().state.songs;
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
@@ -61,8 +69,8 @@ class _HomeViewState extends State<HomeView> {
             decoration: const BoxDecoration(
               gradient: RadialGradient(
                 colors: [
-                  Color(0xFFE95959),
-                  Color(0xFFC2351F),
+                  Color(0xFF343434),
+                  Color(0xFF000000),
                 ],
               ),
             ),
@@ -154,34 +162,34 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              lockSelect = !lockSelect;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            side: BorderSide(
-                              width: 3,
-                              color: Colors.grey[500]!,
-                            ),
-                            elevation: lockSelect ? 0 : 3,
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(10),
-                            primary: lockSelect
-                                ? Colors.transparent
-                                : Colors.grey[500], // <-- Button color
-                            onPrimary: Colors.red, // <-- Splash color
-                          ),
-                          child: Icon(
-                            Icons.vpn_key,
-                            color: lockSelect ? Colors.grey[500] : Colors.white,
-                            size: 40,
-                          ),
-                        ),
-                      )
+                      // Padding(
+                      //   padding: const EdgeInsets.all(10),
+                      //   child: ElevatedButton(
+                      //     onPressed: () {
+                      //       setState(() {
+                      //         lockSelect = !lockSelect;
+                      //       });
+                      //     },
+                      //     style: ElevatedButton.styleFrom(
+                      //       side: BorderSide(
+                      //         width: 3,
+                      //         color: Colors.grey[500]!,
+                      //       ),
+                      //       elevation: lockSelect ? 0 : 3,
+                      //       shape: const CircleBorder(),
+                      //       padding: const EdgeInsets.all(10),
+                      //       primary: lockSelect
+                      //           ? Colors.transparent
+                      //           : Colors.grey[500], // <-- Button color
+                      //       onPrimary: Colors.red, // <-- Splash color
+                      //     ),
+                      //     child: Icon(
+                      //       Icons.vpn_key,
+                      //       color: lockSelect ? Colors.grey[500] : Colors.white,
+                      //       size: 40,
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   )
                 ],
@@ -199,42 +207,51 @@ class _HomeViewState extends State<HomeView> {
                     children: [
                       Text('ALARM',
                           style: Theme.of(context).textTheme.headline1),
-                      Text('Headknocker by Foreigner',
-                          style: Theme.of(context).textTheme.headline2),
+                      if (songs!.isEmpty)
+                        Text('No alarm songs set',
+                            style: Theme.of(context).textTheme.headline2)
+                      else
+                        Text(
+                            context
+                                .watch<AddSongCubit>()
+                                .state
+                                .songs!
+                                .last
+                                .title,
+                            style: Theme.of(context).textTheme.headline2),
                     ],
                   ),
                   trailing: Icon(Icons.chevron_right,
                       color: Theme.of(context).highlightColor),
                   onTap: () {
-                    Navigator.of(context).push<void>(MaterialPageRoute(
-                        builder: (context) => const AddSongPage()));
+                    Navigator.of(context).pushNamed('/addSong');
                   },
                 ),
-                ListTile(
-                  leading: Icon(Icons.vpn_key,
-                      size: 32, color: Theme.of(context).highlightColor),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('LOCK',
-                          style: Theme.of(context).textTheme.headline1),
-                      Text('Locked',
-                          style: Theme.of(context).textTheme.headline2),
-                    ],
-                  ),
-                  trailing: Icon(Icons.chevron_right,
-                      color: Theme.of(context).highlightColor),
-                  onTap: () async {
-                    await Navigator.of(context).push(OnboardingFlow.route());
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(
-                        const SnackBar(
-                          content: Text('Onboarding Flow Complete!'),
-                        ),
-                      );
-                  },
-                ),
+                // ListTile(
+                //   leading: Icon(Icons.vpn_key,
+                //       size: 32, color: Theme.of(context).highlightColor),
+                //   title: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text('LOCK',
+                //           style: Theme.of(context).textTheme.headline1),
+                //       Text('Locked',
+                //           style: Theme.of(context).textTheme.headline2),
+                //     ],
+                //   ),
+                //   trailing: Icon(Icons.chevron_right,
+                //       color: Theme.of(context).highlightColor),
+                //   onTap: () async {
+                //     await Navigator.of(context).push(OnboardingFlow.route());
+                //     ScaffoldMessenger.of(context)
+                //       ..hideCurrentSnackBar()
+                //       ..showSnackBar(
+                //         const SnackBar(
+                //           content: Text('Onboarding Flow Complete!'),
+                //         ),
+                //       );
+                //   },
+                // ),
                 ListTile(
                   leading: Icon(Icons.alarm,
                       size: 32, color: Theme.of(context).highlightColor),

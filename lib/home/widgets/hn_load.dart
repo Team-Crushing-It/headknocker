@@ -25,7 +25,7 @@ class HNLoad extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.15,
                   width: MediaQuery.of(context).size.height * 0.15,
                   child: const CircularProgressIndicator(
-                    color: Colors.black54,
+                    color: Colors.grey,
                     strokeWidth: 20,
                   ),
                 )
