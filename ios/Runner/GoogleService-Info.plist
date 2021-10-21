@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>412766305106-tv03ljnj8mdklkj75tm74g57uk1aa5qp.apps.googleusercontent.com</string>
+	<string>936359464122-e567r21ltadv7daqqrc4q0h4m8ic4854.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.412766305106-tv03ljnj8mdklkj75tm74g57uk1aa5qp</string>
+	<string>com.googleusercontent.apps.936359464122-e567r21ltadv7daqqrc4q0h4m8ic4854</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBlNfIDJLr4LA_gVVyBzJcXy7cfQzlxiXk</string>
+	<string>AIzaSyA0Ri3dQjTtFHta-gLUrL5HKpFsxfTUaeA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>412766305106</string>
+	<string>936359464122</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.l2t.headknocker</string>
+	<string>com.l2t.head-knocker</string>
 	<key>PROJECT_ID</key>
-	<string>head-knocker</string>
+	<string>hello-wine</string>
 	<key>STORAGE_BUCKET</key>
-	<string>head-knocker.appspot.com</string>
+	<string>hello-wine.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:412766305106:ios:26fc901c10ba92addb588b</string>
+	<string>1:936359464122:ios:902f5c25f8a04fb55c8683</string>
 </dict>
 </plist>
