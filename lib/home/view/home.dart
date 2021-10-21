@@ -50,6 +50,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final songs = context.watch<AddSongCubit>().state.songs;
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             decoration: const BoxDecoration(
               gradient: RadialGradient(
                 colors: [
-                  Color(0xFF636363),
+                  Color(0xFF343434),
                   Color(0xFF000000),
                 ],
               ),
@@ -205,9 +207,18 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text('ALARM',
                           style: Theme.of(context).textTheme.headline1),
-                      Text(
-                          context.watch<AddSongCubit>().state.songs.first.title,
-                          style: Theme.of(context).textTheme.headline2),
+                      if (songs!.isEmpty)
+                        Text('No alarm songs set',
+                            style: Theme.of(context).textTheme.headline2)
+                      else
+                        Text(
+                            context
+                                .watch<AddSongCubit>()
+                                .state
+                                .songs!
+                                .first
+                                .title,
+                            style: Theme.of(context).textTheme.headline2),
                     ],
                   ),
                   trailing: Icon(Icons.chevron_right,

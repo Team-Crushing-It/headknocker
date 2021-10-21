@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:songs_repository/songs_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
+import 'package:songs_repository/songs_repository.dart';
 
 part 'add_song_state.dart';
 
@@ -13,9 +13,7 @@ class AddSongCubit extends Cubit<AddSongState> {
       {required FirestoreSongsRepository repository, required String id})
       : _repository = repository,
         _id = id,
-        super(const AddSongState()) {
-    streamSongs();
-  }
+        super(const AddSongState.init());
 
   final FirestoreSongsRepository _repository;
   final String _id;
@@ -25,15 +23,31 @@ class AddSongCubit extends Cubit<AddSongState> {
     _firestoreSubscription = _repository.songs(_id).listen(
           (songStream) => {
             print('streaming'),
-            emit(state.copyWith(songs: songStream)),
+            emit(AddSongState.update(songStream)),
           },
         );
   }
 
-  void addSong() {
-    const output = Song(title: 'title', url: '');
+  Future<void> checkId() async {
+    final exists = await _repository.checkId(_id);
 
-    _repository.addDocument(_id, output.toEntity().toJson());
+    if (exists) {
+      streamSongs();
+
+      emit(const AddSongState.collectionExists());
+    }
+  }
+
+  Future<void> addSong() async {
+    final output =
+        Song(title: 'testing Add Song + ${state.songs!.length}', url: '');
+
+    await _repository.addDocument(_id, output.toEntity().toJson());
+
+    if (state.cStatus == CollectionStatus.firstTime) {
+      emit(const AddSongState.collectionExists());
+      await checkId();
+    }
   }
 
   void emailChanged(String value) {

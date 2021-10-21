@@ -52,13 +52,13 @@ class AddSong extends StatelessWidget {
 class _AddSongView extends StatelessWidget {
   const _AddSongView({Key? key, required this.list}) : super(key: key);
 
-  final List<Song> list;
+  final List<Song>? list;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AddSongCubit, AddSongState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status!.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -83,7 +83,7 @@ class _AddSongView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                list.first.title,
+                list!.first.title,
                 style: Theme.of(context)
                     .textTheme
                     .headline1!
@@ -100,7 +100,7 @@ class _AddSongView extends StatelessWidget {
                     .copyWith(fontSize: 24),
               ),
             ),
-            if (list.length == 1)
+            if (list!.length == 1)
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Text(
@@ -113,15 +113,16 @@ class _AddSongView extends StatelessWidget {
               )
             else
               ListView.builder(
+                reverse: true,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: list.length,
+                itemCount: list!.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
                     child: Text(
-                      list[index].title,
+                      list![index].title,
                       style: Theme.of(context)
                           .textTheme
                           .headline1!
@@ -235,7 +236,7 @@ class _LinkInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Youtube Link',
             helperText: '',
-            errorText: state.link.invalid ? 'invalid link' : null,
+            errorText: state.link!.invalid ? 'invalid link' : null,
           ),
         );
       },
@@ -249,7 +250,7 @@ class _AddSongButton extends StatelessWidget {
     return BlocBuilder<AddSongCubit, AddSongState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status!.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 key: const Key('loginForm_continue_raisedButton'),

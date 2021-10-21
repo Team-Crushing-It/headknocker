@@ -50,8 +50,6 @@ class FirestoreSongsRepository {
 
     final output = check > 0 ? true : false;
 
-    print(output);
-
     return output;
   }
 

@@ -1,9 +1,6 @@
 part of 'home_cubit.dart';
 
-enum HomeStatus {
-  init,
-  loaded,
-}
+enum HomeStatus { init, loaded, firstTime, returned }
 
 class HomeState extends Equatable {
   const HomeState._({

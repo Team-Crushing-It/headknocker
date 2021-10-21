@@ -11,17 +11,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   final FirestoreSongsRepository _repository;
 
-  Future<void> checkId(String id) async {
-    print('id: $id');
-    final exists = await _repository.checkId(id);
-
-    print('exists: $exists');
-
-    if (!exists) {
-      await _repository.createCollection(
-          id, const Song(title: 'No Alarm Set', url: 'url'));
-    }
-
+  Future<void> loadScreen(String id) async {
     await Future.delayed(const Duration(seconds: 3), () {});
 
     emit(const HomeState.loaded());

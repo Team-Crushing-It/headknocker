@@ -60,19 +60,18 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final id = context.watch<AppBloc>().state.user.id;
     return BlocListener<AppBloc, AppState>(
       listener: (context, state) {
         if (state.status == AppStatus.authenticated) {
-          context
-              .read<HomeCubit>()
-              .checkId(context.read<AppBloc>().state.user.id);
+          context.read<HomeCubit>().loadScreen(id);
         }
       },
       child: BlocProvider<AddSongCubit>(
         lazy: true,
         create: (_) => AddSongCubit(
-            repository: context.read<FirestoreSongsRepository>(),
-            id: context.read<AppBloc>().state.user.id),
+            repository: context.read<FirestoreSongsRepository>(), id: id)
+          ..checkId(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
