@@ -9,12 +9,17 @@ class AddSong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AddSongCubit>();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.grey,
         child: const Icon(Icons.add, color: Colors.black),
-        onPressed: () {
-          context.read<AddSongCubit>().addSong();
+        onPressed: () async {
+          final output = await Navigator.of(context).push(
+            _createDialog(context),
+          );
+
+          await cubit.addSong(output.toString());
         },
       ),
       backgroundColor: Colors.black,
@@ -138,87 +143,110 @@ class _AddSongView extends StatelessWidget {
   }
 }
 
-class _CurrentAlarmSong extends StatelessWidget {
-  const _CurrentAlarmSong({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24),
-      child: Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Current Alarm Song',
-              style:
-                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                title,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontSize: 16),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+Route<Object?> _createDialog(BuildContext context) {
+  return DialogRoute<void>(
+    context: context,
+    builder: (context) => const StatefulDialog(),
+  );
 }
 
-class _RecentsView extends StatelessWidget {
-  const _RecentsView({Key? key, required this.list}) : super(key: key);
-
-  final List<Song> list;
+class StatefulDialog extends StatefulWidget {
+  const StatefulDialog({Key? key}) : super(key: key);
 
   @override
+  _StatefulDialogState createState() => _StatefulDialogState();
+}
+
+class _StatefulDialogState extends State<StatefulDialog> {
+  late bool _isButtonDisabled;
+
+  @override
+  void initState() {
+    _isButtonDisabled = false;
+
+    super.initState();
+  }
+
+  String test = '';
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 48),
-      child: Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Recents',
-              style:
-                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24),
+    return SimpleDialog(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white,
             ),
-            if (list.length == 1)
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  'no recents',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1!
-                      .copyWith(fontSize: 16),
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(40),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20, top: 20),
+                  child: Text(
+                    'Please enter the link',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1
+                        ?.copyWith(fontSize: 20, color: Colors.black),
+                  ),
                 ),
-              )
-            else
-              Expanded(
-                child: ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return Text(
-                      list[index].title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(fontSize: 16),
-                    );
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Link',
+                    ),
+                    onChanged: (text) {
+                      test = text;
+                      setState(() {
+                        _isButtonDisabled = true;
+                      });
+                    },
+                  ),
                 ),
-              )
-          ],
-        ),
-      ),
+                Padding(
+                    padding: const EdgeInsets.all(8),
+                    //=================================================
+                    child: ElevatedButton(
+                      onPressed: !_isButtonDisabled
+                          ? null
+                          : () async {
+                              Navigator.pop(context, test);
+                            },
+                      child: const Text('Upload'),
+                      //  color:
+                      //       _isButtonDisabled ? Colors.white : Colors.grey,
+                      //   style: Theme.of(context).textTheme.headline2!,
+                      //   height: 60,
+                    )
+                    //=================================================
+                    ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context, 'cancelled');
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color?>(Colors.teal),
+                    ),
+                    child: const Text('Cancel',
+                        style: TextStyle(color: Colors.black)),
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -38,9 +38,8 @@ class AddSongCubit extends Cubit<AddSongState> {
     }
   }
 
-  Future<void> addSong() async {
-    final output =
-        Song(title: 'testing Add Song + ${state.songs!.length}', url: '');
+  Future<void> addSong(String input) async {
+    final output = Song(title: input, url: input);
 
     await _repository.addDocument(_id, output.toEntity().toJson());
 
@@ -50,7 +49,7 @@ class AddSongCubit extends Cubit<AddSongState> {
     }
   }
 
-  void emailChanged(String value) {
+  void linkChanged(String value) {
     final link = Link.dirty(value);
     emit(state.copyWith(
       link: link,
