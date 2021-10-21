@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
+import 'package:http/http.dart' as http;
 import 'package:songs_repository/songs_repository.dart';
 
 part 'add_song_state.dart';
@@ -38,8 +40,26 @@ class AddSongCubit extends Cubit<AddSongState> {
     }
   }
 
-  Future<void> addSong(String input) async {
-    final output = Song(title: input, url: input);
+  Future<void> addSong() async {
+    Map<String, dynamic> jsonTitle;
+    String title;
+
+    final response = await http.get(Uri.parse(
+        'https://www.youtube.com/oembed?url=${state.link!.value}&format=json'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      jsonTitle = jsonDecode(response.body) as Map<String, dynamic>;
+
+      title = jsonTitle['title'].toString();
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+
+    final output = Song(title: title, url: state.link.toString());
 
     await _repository.addDocument(_id, output.toEntity().toJson());
 

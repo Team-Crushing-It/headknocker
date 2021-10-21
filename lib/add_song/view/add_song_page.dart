@@ -19,7 +19,10 @@ class AddSong extends StatelessWidget {
             _createDialog(context),
           );
 
-          await cubit.addSong(output.toString());
+          if (output.toString() == 'cancelled') {
+            print('cancelled');
+          } else
+            await cubit.addSong();
         },
       ),
       backgroundColor: Colors.black,
@@ -198,36 +201,12 @@ class _StatefulDialogState extends State<StatefulDialog> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Link',
-                    ),
-                    onChanged: (text) {
-                      test = text;
-                      setState(() {
-                        _isButtonDisabled = true;
-                      });
-                    },
-                  ),
+                  child: _LinkInput(),
                 ),
                 Padding(
-                    padding: const EdgeInsets.all(8),
-                    //=================================================
-                    child: ElevatedButton(
-                      onPressed: !_isButtonDisabled
-                          ? null
-                          : () async {
-                              Navigator.pop(context, test);
-                            },
-                      child: const Text('Upload'),
-                      //  color:
-                      //       _isButtonDisabled ? Colors.white : Colors.grey,
-                      //   style: Theme.of(context).textTheme.headline2!,
-                      //   height: 60,
-                    )
-                    //=================================================
-                    ),
+                  padding: const EdgeInsets.all(8),
+                  child: _AddSongButton(),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: TextButton(
@@ -258,8 +237,8 @@ class _LinkInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.link != current.link,
       builder: (context, state) {
         return TextField(
-          key: const Key('addSongForm_linkInput_textField'),
-          // onChanged: (email) => context.read<AddSongCubit>().emailChanged(email),
+          // key: const Key('addSongForm_linkInput_textField'),
+          onChanged: (link) => context.read<AddSongCubit>().linkChanged(link),
           keyboardType: TextInputType.url,
           decoration: InputDecoration(
             labelText: 'Youtube Link',
@@ -281,18 +260,18 @@ class _AddSongButton extends StatelessWidget {
         return state.status!.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('loginForm_continue_raisedButton'),
+                // key: const Key('loginForm_continue_raisedButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  primary: const Color(0xFFFFD600),
+                  primary: Colors.grey,
                 ),
-                onPressed: () {},
-                // onPressed: state.status.isValidated
-                //     ? () => context.read<LoginCubit>().logInWithCredentials()
-                //     : null,
-                child: const Text('LOGIN'),
+                onPressed: state.status!.isValidated
+                    ? () => {Navigator.pop(context, 'test')}
+                    : null,
+                child:
+                    const Text('Upload', style: TextStyle(color: Colors.black)),
               );
       },
     );
