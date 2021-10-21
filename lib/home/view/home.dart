@@ -162,34 +162,34 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(10),
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       setState(() {
-                      //         lockSelect = !lockSelect;
-                      //       });
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       side: BorderSide(
-                      //         width: 3,
-                      //         color: Colors.grey[500]!,
-                      //       ),
-                      //       elevation: lockSelect ? 0 : 3,
-                      //       shape: const CircleBorder(),
-                      //       padding: const EdgeInsets.all(10),
-                      //       primary: lockSelect
-                      //           ? Colors.transparent
-                      //           : Colors.grey[500], // <-- Button color
-                      //       onPrimary: Colors.red, // <-- Splash color
-                      //     ),
-                      //     child: Icon(
-                      //       Icons.vpn_key,
-                      //       color: lockSelect ? Colors.grey[500] : Colors.white,
-                      //       size: 40,
-                      //     ),
-                      //   ),
-                      // )
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              lockSelect = !lockSelect;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: BorderSide(
+                              width: 3,
+                              color: Colors.grey[500]!,
+                            ),
+                            elevation: lockSelect ? 0 : 3,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(10),
+                            primary: lockSelect
+                                ? Colors.transparent
+                                : Colors.grey[500], // <-- Button color
+                            onPrimary: Colors.red, // <-- Splash color
+                          ),
+                          child: Icon(
+                            Icons.vpn_key,
+                            color: lockSelect ? Colors.grey[500] : Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                      )
                     ],
                   )
                 ],
