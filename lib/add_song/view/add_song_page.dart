@@ -83,7 +83,7 @@ class _AddSongView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                list!.first.title,
+                list!.last.title,
                 style: Theme.of(context)
                     .textTheme
                     .headline1!

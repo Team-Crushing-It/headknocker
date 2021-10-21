@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                                 .watch<AddSongCubit>()
                                 .state
                                 .songs!
-                                .first
+                                .last
                                 .title,
                             style: Theme.of(context).textTheme.headline2),
                     ],
