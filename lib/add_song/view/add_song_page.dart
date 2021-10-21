@@ -116,7 +116,7 @@ class _AddSongView extends StatelessWidget {
                 reverse: true,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: list!.length,
+                itemCount: list!.length - 1,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding:
