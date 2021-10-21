@@ -227,31 +227,31 @@ class _HomePageState extends State<HomePage> {
                     Navigator.of(context).pushNamed('/addSong');
                   },
                 ),
-                // ListTile(
-                //   leading: Icon(Icons.vpn_key,
-                //       size: 32, color: Theme.of(context).highlightColor),
-                //   title: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Text('LOCK',
-                //           style: Theme.of(context).textTheme.headline1),
-                //       Text('Locked',
-                //           style: Theme.of(context).textTheme.headline2),
-                //     ],
-                //   ),
-                //   trailing: Icon(Icons.chevron_right,
-                //       color: Theme.of(context).highlightColor),
-                //   onTap: () async {
-                //     await Navigator.of(context).push(OnboardingFlow.route());
-                //     ScaffoldMessenger.of(context)
-                //       ..hideCurrentSnackBar()
-                //       ..showSnackBar(
-                //         const SnackBar(
-                //           content: Text('Onboarding Flow Complete!'),
-                //         ),
-                //       );
-                //   },
-                // ),
+                ListTile(
+                  leading: Icon(Icons.vpn_key,
+                      size: 32, color: Theme.of(context).highlightColor),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('LOCK',
+                          style: Theme.of(context).textTheme.headline1),
+                      Text('Locked',
+                          style: Theme.of(context).textTheme.headline2),
+                    ],
+                  ),
+                  trailing: Icon(Icons.chevron_right,
+                      color: Theme.of(context).highlightColor),
+                  onTap: () async {
+                    await Navigator.of(context).push(OnboardingFlow.route());
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        const SnackBar(
+                          content: Text('Onboarding Flow Complete!'),
+                        ),
+                      );
+                  },
+                ),
                 ListTile(
                   leading: Icon(Icons.alarm,
                       size: 32, color: Theme.of(context).highlightColor),
